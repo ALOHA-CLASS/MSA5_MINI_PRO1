@@ -1,5 +1,21 @@
+
+# 기본 
+*.classpath
+**/*.classpath
+
+**/*.project
+
+.settings/**
+**/.settings/**
+
+
+build
+**/build
+
+
 # Compiled class file
 *.class
+**/*.class
 
 # Log file
 *.log
