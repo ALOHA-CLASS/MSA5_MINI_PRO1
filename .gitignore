@@ -1,9 +1,8 @@
 
 # 기본 
-*.classpath
-**/*.classpath
-
-**/*.project
+# *.classpath
+# **/*.classpath
+# **/*.project
 
 .settings/**
 **/.settings/**
