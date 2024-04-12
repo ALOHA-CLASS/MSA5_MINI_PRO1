@@ -1,0 +1,159 @@
+DROP TABLE users CASCADE CONSTRAINT PURGE;
+DROP TABLE user_auth CASCADE CONSTRAINT PURGE;
+DROP TABLE posts CASCADE CONSTRAINT PURGE;
+DROP TABLE category CASCADE CONSTRAINT PURGE;
+DROP TABLE files CASCADE CONSTRAINT PURGE;
+DROP TABLE comments CASCADE CONSTRAINT PURGE;
+DROP TABLE persistent_logins CASCADE CONSTRAINT PURGE;
+
+CREATE TABLE users (
+	id	VARCHAR2(255)		NOT NULL PRIMARY KEY,
+	username	VARCHAR2(100)		NULL UNIQUE,
+	password	VARCHAR2(100)		NULL,
+	name	VARCHAR2(50)		NULL,
+	email	VARCHAR2(200)		NULL,
+	reg_date DATE DEFAULT sysdate		NULL,
+	upd_date DATE DEFAULT sysdate		NULL
+);
+
+
+
+CREATE TABLE user_auth (
+	id	VARCHAR2(255)		NOT NULL,
+	users_id	VARCHAR2(255)		NOT NULL,
+	username	VARCHAR2(100)		NULL,
+	auth	VARCHAR2(100)		NULL,
+	reg_date DATE DEFAULT sysdate		NULL,
+	upd_date DATE DEFAULT sysdate		NULL
+);
+
+
+
+CREATE TABLE posts (
+	id	VARCHAR2(255)		NOT NULL,
+	users_id	VARCHAR2(255)		NOT NULL,
+	cate_id	VARCHAR2(255)		NOT NULL,
+	post_no	NUMBER		NULL,
+	title	VARCHAR2(200)		NULL,
+	username	VARCHAR2(100)	DEFAULT 'NOUSER'	NULL,
+	name	VARCHAR2(100)		NULL,
+	password	VARCHAR2(100)		NULL,
+	content	CLOB		NULL,
+	reg_date DATE DEFAULT sysdate		NULL,
+	upd_date DATE DEFAULT sysdate		NULL
+);
+
+
+
+CREATE TABLE category (
+	id	VARCHAR2(255)		NOT NULL,
+	category_id	VARCHAR2(100)		NULL,
+	name	VARCHAR2(100)		NULL,
+	post_no	NUMBER		NULL,
+	type	VARCHAR2(100)		NULL,
+	seq		NUMBER	DEFAULT 0 NOT NULL,
+	reg_date DATE DEFAULT sysdate		NULL,
+	upd_date DATE DEFAULT sysdate		NULL
+);
+
+
+
+CREATE TABLE files (
+	id	VARCHAR2(255)		NOT NULL,
+	parent_name	VARCHAR2(100)		NULL,
+	parent_id	VARCHAR2(255)		NULL,
+	type	VARCHAR2(100)	DEFAULT 'basic'	NULL,
+	file_name	VARCHAR2(100)		NULL,
+	file_path	VARCHAR2(2000)		NULL,
+	file_size	NUMBER		NULL,
+	reg_date DATE DEFAULT sysdate		NULL,
+	upd_date DATE DEFAULT sysdate		NULL
+);
+
+
+
+CREATE TABLE comments (
+	id	VARCHAR2(255)		NOT NULL,
+	post_id	VARCHAR2(255)		NOT NULL,
+	username	VARCHAR2(100)		NULL,
+	name	VARCHAR2(100)		NULL,
+	password	VARCHAR2(100)		NULL,
+	content	CLOB		NULL,
+	reg_date DATE DEFAULT sysdate		NULL,
+	upd_date DATE DEFAULT sysdate		NULL
+);
+
+
+
+CREATE TABLE persistent_logins (
+	id	VARCHAR2(255)		NOT NULL,
+	users_id	VARCHAR2(255)		NOT NULL,
+	username	VARCHAR2(100)		NULL,
+	token	VARCHAR2(255)		NULL,
+	reg_date DATE DEFAULT sysdate		NULL,
+	upd_date DATE DEFAULT sysdate		NULL
+);
+
+--ALTER TABLE users ADD CONSTRAINT PK_USERS PRIMARY KEY (
+--	id
+--);
+
+ALTER TABLE user_auth ADD CONSTRAINT PK_USER_AUTH PRIMARY KEY (
+	id
+);
+
+ALTER TABLE posts ADD CONSTRAINT PK_POSTS PRIMARY KEY (
+	id
+);
+
+ALTER TABLE category ADD CONSTRAINT PK_CATEGORY PRIMARY KEY (
+	id
+);
+
+ALTER TABLE files ADD CONSTRAINT PK_FILES PRIMARY KEY (
+	id
+);
+
+ALTER TABLE comments ADD CONSTRAINT PK_COMMENTS PRIMARY KEY (
+	id
+);
+
+ALTER TABLE persistent_logins ADD CONSTRAINT PK_PERSISTENT_LOGINS PRIMARY KEY (
+	id
+);
+
+ALTER TABLE user_auth ADD CONSTRAINT FK_users_TO_user_auth_1 FOREIGN KEY (
+	users_id
+)
+REFERENCES users (
+	id
+);
+
+ALTER TABLE posts ADD CONSTRAINT FK_users_TO_posts_1 FOREIGN KEY (
+	users_id
+)
+REFERENCES users (
+	id
+);
+
+ALTER TABLE posts ADD CONSTRAINT FK_category_TO_posts_1 FOREIGN KEY (
+	cate_id
+)
+REFERENCES category (
+	id
+);
+
+ALTER TABLE comments ADD CONSTRAINT FK_posts_TO_comments_1 FOREIGN KEY (
+	post_id
+)
+REFERENCES posts (
+	id
+);
+
+ALTER TABLE persistent_logins ADD CONSTRAINT FK_users_TO_persistent_logins_1 FOREIGN KEY (
+	users_id
+)
+REFERENCES users (
+	id
+);
+
